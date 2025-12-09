@@ -52,7 +52,7 @@ try:
     else:
         # Fallback: try to load from GitHub if local file doesn't exist
         try:
-            github_url = "https://github.com/Sharjeelkhhan/descend-fitness-dashboard/blob/main/descend_banner.png"
+            github_url = "https://raw.githubusercontent.com/Sharjeelkhhan/descend-fitness-dashboard/main/descend_banner.png"
             response = requests.get(github_url)
             if response.status_code == 200:
                 banner_img = Image.open(BytesIO(response.content))
