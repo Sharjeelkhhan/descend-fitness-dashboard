@@ -38,15 +38,33 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header with banner
-banner_path = "descend banner2.png"
+import requests
+from PIL import Image
+from io import BytesIO
+
+banner_path = "descend_banner.png"
 try:
     if os.path.exists(banner_path):
+        # Local path - works when running locally
         col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
         with col_banner2:
             st.image(banner_path, use_container_width=True)
     else:
-        st.markdown("### 🏔️ DESCEND")
-        st.markdown("**GRAVITY CONDITIONING**")
+        # Fallback: try to load from GitHub if local file doesn't exist
+        try:
+            github_url = "https://github.com/Sharjeelkhhan/descend-fitness-dashboard/blob/main/descend_banner.png"
+            response = requests.get(github_url)
+            if response.status_code == 200:
+                banner_img = Image.open(BytesIO(response.content))
+                col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
+                with col_banner2:
+                    st.image(banner_img, use_container_width=True)
+            else:
+                st.markdown("### 🏔️ DESCEND")
+                st.markdown("**GRAVITY CONDITIONING**")
+        except Exception:
+            st.markdown("### 🏔️ DESCEND")
+            st.markdown("**GRAVITY CONDITIONING**")
 except Exception:
     st.markdown("### 🏔️ DESCEND")
     st.markdown("**GRAVITY CONDITIONING**")
