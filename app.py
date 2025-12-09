@@ -42,7 +42,8 @@ import requests
 from PIL import Image
 from io import BytesIO
 
-banner_path = "descend_banner.png"
+banner_path = os.path.join(os.path.dirname(__file__), "descend_banner.png")
+
 try:
     if os.path.exists(banner_path):
         # Local path - works when running locally
