@@ -46,31 +46,7 @@ banner_path = os.path.join(os.path.dirname(__file__), "descend_banner.png")
 col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
 with col_banner2:
     st.image(banner_path, use_column_width=True)
-try:
-    if os.path.exists(banner_path):
-        # Local path - works when running locally
-        col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
-        with col_banner2:
-            st.image(banner_path, use_container_width=True)
-    else:
-        # Fallback: try to load from GitHub if local file doesn't exist
-        try:
-            github_url = "https://raw.githubusercontent.com/Sharjeelkhhan/descend-fitness-dashboard/main/descend_banner.png"
-            response = requests.get(github_url)
-            if response.status_code == 200:
-                banner_img = Image.open(BytesIO(response.content))
-                col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
-                with col_banner2:
-                    st.image(banner_img, use_container_width=True)
-            else:
-               # st.markdown("### 🏔️ DESCEND")
-                #st.markdown("**GRAVITY CONDITIONING**")
-        except Exception:
-            #st.markdown("### 🏔️ DESCEND")
-            #st.markdown("**GRAVITY CONDITIONING**")
-except Exception:
-    #st.markdown("### 🏔️ DESCEND")
-    #st.markdown("**GRAVITY CONDITIONING**")
+
 
 st.markdown("---")
 
@@ -359,5 +335,6 @@ with col2:
         """)
         
         st.info("💡 **Tip:** Fill in the form on the left and click 'Calculate Scores' to see your athlete profile.")
+
 
 
