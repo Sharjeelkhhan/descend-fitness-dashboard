@@ -63,14 +63,14 @@ try:
                 with col_banner2:
                     st.image(banner_img, use_container_width=True)
             else:
-                st.markdown("### 🏔️ DESCEND")
-                st.markdown("**GRAVITY CONDITIONING**")
+               # st.markdown("### 🏔️ DESCEND")
+                #st.markdown("**GRAVITY CONDITIONING**")
         except Exception:
-            st.markdown("### 🏔️ DESCEND")
-            st.markdown("**GRAVITY CONDITIONING**")
+            #st.markdown("### 🏔️ DESCEND")
+            #st.markdown("**GRAVITY CONDITIONING**")
 except Exception:
-    st.markdown("### 🏔️ DESCEND")
-    st.markdown("**GRAVITY CONDITIONING**")
+    #st.markdown("### 🏔️ DESCEND")
+    #st.markdown("**GRAVITY CONDITIONING**")
 
 st.markdown("---")
 
@@ -359,4 +359,5 @@ with col2:
         """)
         
         st.info("💡 **Tip:** Fill in the form on the left and click 'Calculate Scores' to see your athlete profile.")
+
 
