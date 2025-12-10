@@ -157,33 +157,34 @@ with col2:
             ),
             text=[f"{round_int(v)}" for v in values],
             textposition='outside',
-            textfont=dict(color='#ff8c00', size=12, family='Arial Black'),
+            textfont=dict(color='#ff8c00', size=11, family='Arial Black'),
             textangle=0
         ))
         
-        # Responsive layout that works on both desktop and mobile
+        # Responsive layout with wider mobile display
         fig.update_layout(
             plot_bgcolor='#2a2a2a',
             paper_bgcolor='#2a2a2a',
-            font=dict(color='#ffffff', size=10, family='Arial'),
+            font=dict(color='#ffffff', size=9, family='Arial'),
             xaxis=dict(
-                range=[0, 120],
+                range=[0, 110],  # Reduced from 120 to give more room for bars
                 showgrid=True,
                 gridcolor='#404040',
                 zeroline=True,
                 zerolinecolor='#404040',
                 tickvals=[0, 20, 40, 60, 80, 100],
-                tickfont=dict(color='#999999', size=9),
-                fixedrange=True  # Prevent zoom on mobile
+                tickfont=dict(color='#999999', size=8),
+                fixedrange=True,
+                side='bottom'
             ),
             yaxis=dict(
                 showgrid=False,
-                tickfont=dict(color='#ffffff', size=10),
-                fixedrange=True,  # Prevent zoom on mobile
-                automargin=True  # Auto-adjust margins for labels
+                tickfont=dict(color='#ffffff', size=9),
+                fixedrange=True,
+                automargin=False  # Disable auto margin
             ),
-            height=400,  # Slightly taller for better mobile display
-            margin=dict(l=20, r=60, t=10, b=30, autoexpand=True),
+            height=400,
+            margin=dict(l=10, r=40, t=5, b=25),  # Much tighter margins, especially left
             showlegend=False,
             autosize=True
         )
@@ -377,6 +378,7 @@ with col2:
         """)
         
         st.info("💡 **Tip:** Fill in the form on the left and click 'Calculate Scores' to see your athlete profile.")
+
 
 
 
