@@ -134,6 +134,7 @@ with col2:
         st.markdown("## MTB Athlete Profile – Strength | Endurance | Anaerobic | Aerobic | Power")
         
         # Horizontal bar chart with mobile-responsive settings
+        # Horizontal bar chart with mobile-responsive settings
         categories = [
             "POWER",
             "AEROBIC", 
@@ -161,13 +162,13 @@ with col2:
             textangle=0
         ))
         
-        # Responsive layout with wider mobile display
+        # Responsive layout with category labels visible
         fig.update_layout(
             plot_bgcolor='#2a2a2a',
             paper_bgcolor='#2a2a2a',
             font=dict(color='#ffffff', size=9, family='Arial'),
             xaxis=dict(
-                range=[0, 110],  # Reduced from 120 to give more room for bars
+                range=[0, 110],
                 showgrid=True,
                 gridcolor='#404040',
                 zeroline=True,
@@ -181,10 +182,11 @@ with col2:
                 showgrid=False,
                 tickfont=dict(color='#ffffff', size=9),
                 fixedrange=True,
-                automargin=False  # Disable auto margin
+                automargin=True,  # Re-enable to show labels
+                tickmode='linear'
             ),
             height=400,
-            margin=dict(l=10, r=40, t=5, b=25),  # Much tighter margins, especially left
+            margin=dict(l=5, r=35, t=5, b=25),  # Minimal margins, automargin will handle labels
             showlegend=False,
             autosize=True
         )
@@ -378,6 +380,7 @@ with col2:
         """)
         
         st.info("💡 **Tip:** Fill in the form on the left and click 'Calculate Scores' to see your athlete profile.")
+
 
 
 
