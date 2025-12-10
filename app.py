@@ -57,10 +57,6 @@ st.markdown("""
 
 # Header with banner
 banner_path = "descend_banner.png"
-col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
-with col_banner2:
-    st.image(banner_path, use_container_width=True)
-banner_path = "descend banner2.png"
 try:
     if os.path.exists(banner_path):
         col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
@@ -381,5 +377,6 @@ with col2:
         """)
         
         st.info("💡 **Tip:** Fill in the form on the left and click 'Calculate Scores' to see your athlete profile.")
+
 
 
