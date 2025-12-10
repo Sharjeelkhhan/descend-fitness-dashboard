@@ -56,7 +56,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Header with banner
-banner_path = os.path.join(os.path.dirname(__file__), "descend_banner.png")
+banner_path = "descend_banner.png"
 col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
 with col_banner2:
     st.image(banner_path, use_container_width=True)
@@ -381,3 +381,4 @@ with col2:
         """)
         
         st.info("💡 **Tip:** Fill in the form on the left and click 'Calculate Scores' to see your athlete profile.")
+
