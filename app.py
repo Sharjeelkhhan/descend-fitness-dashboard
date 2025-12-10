@@ -60,19 +60,19 @@ banner_path = os.path.join(os.path.dirname(__file__), "descend_banner.png")
 col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
 with col_banner2:
     st.image(banner_path, use_container_width=True)
-banner_path = "descend banner2.png"
-try:
-    if os.path.exists(banner_path):
-        col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
-        with col_banner2:
-            pass
+#banner_path = "descend banner2.png"
+#try:
+#    if os.path.exists(banner_path):
+#        col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
+#        with col_banner2:
+ #           pass
            # st.image(banner_path, use_container_width=True)
-    else:
-        pass
+  #  else:
+   #     pass
         # st.markdown("### 🏔️ DESCEND")
         # st.markdown("**GRAVITY CONDITIONING**")
-except Exception:
-    pass
+#except Exception:
+ #   pass
     # st.markdown("### 🏔️ DESCEND")
     # st.markdown("**GRAVITY CONDITIONING**")
 
