@@ -14,7 +14,7 @@ def round_int(value):
 
 st.set_page_config(page_title="DESCEND Fitness Dashboard", layout="wide")
 
-# Custom CSS
+# Custom CSS with mobile responsiveness
 st.markdown("""
     <style>
     .main {
@@ -34,19 +34,47 @@ st.markdown("""
         border-radius: 8px;
         border-left: 4px solid #ff8c00;
     }
+    
+    /* Mobile-specific styles */
+    @media only screen and (max-width: 768px) {
+        /* Make chart container scrollable on mobile if needed */
+        .js-plotly-plot {
+            overflow-x: auto !important;
+        }
+        
+        /* Adjust header font sizes for mobile */
+        h2 {
+            font-size: 1.2rem !important;
+        }
+        
+        /* Make overall score text smaller on mobile */
+        .main h3 span {
+            font-size: 32px !important;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # Header with banner
-import requests
-from PIL import Image
-from io import BytesIO
-
 banner_path = os.path.join(os.path.dirname(__file__), "descend_banner.png")
 col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
 with col_banner2:
-    st.image(banner_path, use_column_width=True)
-
+    st.image(banner_path, use_container_width=True)
+banner_path = "descend banner2.png"
+try:
+    if os.path.exists(banner_path):
+        col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
+        with col_banner2:
+            pass
+           # st.image(banner_path, use_container_width=True)
+    else:
+        pass
+        # st.markdown("### 🏔️ DESCEND")
+        # st.markdown("**GRAVITY CONDITIONING**")
+except Exception:
+    pass
+    # st.markdown("### 🏔️ DESCEND")
+    # st.markdown("**GRAVITY CONDITIONING**")
 
 st.markdown("---")
 
@@ -109,17 +137,18 @@ with col2:
         # Results header
         st.markdown("## MTB Athlete Profile – Strength | Endurance | Anaerobic | Aerobic | Power")
         
-        # Horizontal bar chart
+        # Horizontal bar chart with mobile-responsive settings
         categories = [
-            "POWER SCORE",
-            "AEROBIC SCORE", 
-            "ANAEROBIC SCORE",
-            "STRENGTH ENDURANCE SCORE",
-            "ABSOLUTE STRENGTH SCORE"
+            "POWER",
+            "AEROBIC", 
+            "ANAEROBIC",
+            "STR. ENDURANCE",
+            "ABS. STRENGTH"
         ]
         
         values = [power, aerobic, anaerobic, endurance, strength]
         
+        # Create the figure
         fig = go.Figure()
         
         fig.add_trace(go.Bar(
@@ -132,13 +161,15 @@ with col2:
             ),
             text=[f"{round_int(v)}" for v in values],
             textposition='outside',
-            textfont=dict(color='#ff8c00', size=14, family='Arial Black')
+            textfont=dict(color='#ff8c00', size=12, family='Arial Black'),
+            textangle=0
         ))
         
+        # Responsive layout that works on both desktop and mobile
         fig.update_layout(
             plot_bgcolor='#2a2a2a',
             paper_bgcolor='#2a2a2a',
-            font=dict(color='#ffffff', size=12, family='Arial'),
+            font=dict(color='#ffffff', size=10, family='Arial'),
             xaxis=dict(
                 range=[0, 120],
                 showgrid=True,
@@ -146,18 +177,33 @@ with col2:
                 zeroline=True,
                 zerolinecolor='#404040',
                 tickvals=[0, 20, 40, 60, 80, 100],
-                tickfont=dict(color='#999999')
+                tickfont=dict(color='#999999', size=9),
+                fixedrange=True  # Prevent zoom on mobile
             ),
             yaxis=dict(
                 showgrid=False,
-                tickfont=dict(color='#ffffff', size=11)
+                tickfont=dict(color='#ffffff', size=10),
+                fixedrange=True,  # Prevent zoom on mobile
+                automargin=True  # Auto-adjust margins for labels
             ),
-            height=350,
-            margin=dict(l=200, r=50, t=20, b=40),
-            showlegend=False
+            height=400,  # Slightly taller for better mobile display
+            margin=dict(l=20, r=60, t=10, b=30, autoexpand=True),
+            showlegend=False,
+            autosize=True
         )
         
-        st.plotly_chart(fig, use_container_width=True)
+        # Display with responsive configuration
+        st.plotly_chart(
+            fig, 
+            use_container_width=True,
+            config={
+                'displayModeBar': False,
+                'staticPlot': False,
+                'responsive': True,
+                'doubleClick': False,
+                'showTips': False
+            }
+        )
         
         # Overall score and recommendation
         st.markdown("---")
@@ -335,6 +381,3 @@ with col2:
         """)
         
         st.info("💡 **Tip:** Fill in the form on the left and click 'Calculate Scores' to see your athlete profile.")
-
-
-
