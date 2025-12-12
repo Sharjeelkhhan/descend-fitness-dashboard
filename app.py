@@ -21,6 +21,10 @@ st.markdown("""
         background-color: #2a2a2a;
         color: #ffffff;
     }
+    /* Force text color for all standard Streamlit text elements */
+    .stMarkdown, .stMarkdown p, label, .stSelectbox label, .stNumberInput label, .stDateInput label {
+        color: #ffffff !important;
+    }
     h1, h2, h3, h4 {
         color: #ff8c00;
         font-family: 'Arial Black', sans-serif;
