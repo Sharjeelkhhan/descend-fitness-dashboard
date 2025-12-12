@@ -14,7 +14,7 @@ def round_int(value):
 
 st.set_page_config(page_title="DESCEND Fitness Dashboard", layout="wide")
 
-# Custom CSS with mobile responsiveness
+# Custom CSS
 st.markdown("""
     <style>
     .main {
@@ -39,38 +39,35 @@ st.markdown("""
     @media only screen and (max-width: 768px) {
         /* Make chart container scrollable on mobile if needed */
         .js-plotly-plot {
-            overflow-x: auto !important;
+            overflow-x: hidden !important; /* Let Plotly handle resizing */
         }
         
         /* Adjust header font sizes for mobile */
         h2 {
-            font-size: 1.2rem !important;
+            font-size: 1.5rem !important;
         }
         
         /* Make overall score text smaller on mobile */
         .main h3 span {
-            font-size: 32px !important;
+            font-size: 28px !important;
+        }
+
+        /* Better padding for mobile */
+        .block-container {
+            padding-top: 2rem !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
         }
     }
     </style>
 """, unsafe_allow_html=True)
 
 # Header with banner
-banner_path = "descend_banner.png"
-try:
-    if os.path.exists(banner_path):
-        col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
-        with col_banner2:
-            pass
-            st.image(banner_path, use_container_width=True)
-    else:
-        pass
-        # st.markdown("### 🏔️ DESCEND")
-        # st.markdown("**GRAVITY CONDITIONING**")
-except Exception:
-    pass
-    # st.markdown("### 🏔️ DESCEND")
-    # st.markdown("**GRAVITY CONDITIONING**")
+# Header with banner
+banner_url = "https://raw.githubusercontent.com/Sharjeelkhhan/descend-fitness-dashboard/main/descend_banner.png"
+col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
+with col_banner2:
+    st.image(banner_url, use_container_width=True)
 
 st.markdown("---")
 
@@ -133,19 +130,17 @@ with col2:
         # Results header
         st.markdown("## MTB Athlete Profile – Strength | Endurance | Anaerobic | Aerobic | Power")
         
-        # Horizontal bar chart with mobile-responsive settings
-        # Horizontal bar chart with mobile-responsive settings
+        # Horizontal bar chart
         categories = [
-            "POWER",
-            "AEROBIC", 
-            "ANAEROBIC",
-            "STR. ENDURANCE",
-            "ABS. STRENGTH"
+            "POWER SCORE",
+            "AEROBIC SCORE", 
+            "ANAEROBIC SCORE",
+            "STRENGTH ENDURANCE SCORE",
+            "ABSOLUTE STRENGTH SCORE"
         ]
         
         values = [power, aerobic, anaerobic, endurance, strength]
         
-        # Create the figure
         fig = go.Figure()
         
         fig.add_trace(go.Bar(
@@ -158,35 +153,32 @@ with col2:
             ),
             text=[f"{round_int(v)}" for v in values],
             textposition='outside',
-            textfont=dict(color='#ff8c00', size=11, family='Arial Black'),
-            textangle=0
+            textfont=dict(color='#ff8c00', size=14, family='Arial Black')
         ))
         
-        # Responsive layout with category labels visible
+        # Responsive layout that works on both desktop and mobile
         fig.update_layout(
             plot_bgcolor='#2a2a2a',
             paper_bgcolor='#2a2a2a',
-            font=dict(color='#ffffff', size=9, family='Arial'),
+            font=dict(color='#ffffff', size=12, family='Arial'),
             xaxis=dict(
-                range=[0, 110],
+                range=[0, 120],
                 showgrid=True,
                 gridcolor='#404040',
                 zeroline=True,
                 zerolinecolor='#404040',
                 tickvals=[0, 20, 40, 60, 80, 100],
-                tickfont=dict(color='#999999', size=8),
-                fixedrange=True,
-                side='bottom'
+                tickfont=dict(color='#999999', size=11),
+                fixedrange=True  # Prevent zoom on mobile
             ),
             yaxis=dict(
                 showgrid=False,
-                tickfont=dict(color='#ffffff', size=9),
-                fixedrange=True,
-                automargin=True,  # Re-enable to show labels
-                tickmode='linear'
+                tickfont=dict(color='#ffffff', size=12),
+                fixedrange=True,  # Prevent zoom on mobile
+                automargin=True  # Auto-adjust margins for labels
             ),
-            height=400,
-            margin=dict(l=5, r=35, t=5, b=25),  # Minimal margins, automargin will handle labels
+            height=500,  # Increased height for better mobile display
+            margin=dict(l=10, r=40, t=20, b=40, autoexpand=True),
             showlegend=False,
             autosize=True
         )
@@ -380,8 +372,3 @@ with col2:
         """)
         
         st.info("💡 **Tip:** Fill in the form on the left and click 'Calculate Scores' to see your athlete profile.")
-
-
-
-
-
