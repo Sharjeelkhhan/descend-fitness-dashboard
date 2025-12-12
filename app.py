@@ -66,7 +66,7 @@ st.markdown("""
 banner_url = "https://raw.githubusercontent.com/Sharjeelkhhan/descend-fitness-dashboard/main/descend_banner.png"
 col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
 with col_banner2:
-    st.image(banner_url, use_container_width=True)
+    st.image(banner_url, use_column_width=True)
 
 st.markdown("---")
 
