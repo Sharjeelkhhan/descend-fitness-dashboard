@@ -16,56 +16,56 @@ st.set_page_config(page_title="DESCEND Fitness Dashboard", layout="wide")
 
 # Custom CSS
 st.markdown("""
-    <meta name="color-scheme" content="light">
-    <style>
-    .main {
-        background-color: #2a2a2a;
-        color: #ffffff;
-    }
+<meta name="color-scheme" content="light">
+<style>
+.main {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
 
-    /* Force text color for all standard Streamlit text elements */
-    .stMarkdown, .stMarkdown p, label, .stSelectbox label, .stNumberInput label, .stDateInput label {
-        color: #ffffff !important;
-    }
-    h1, h2, h3, h4 {
-        color: #ff8c00;
-        font-family: 'Arial Black', sans-serif;
-    }
-    .stAlert {
-        background-color: #1a1a1a;
-    }
-    .metric-card {
-        background-color: #3a3a3a;
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 4px solid #ff8c00;
+/* Force text color for all standard Streamlit text elements */
+.stMarkdown, .stMarkdown p, label, .stSelectbox label, .stNumberInput label, .stDateInput label {
+    color: #ffffff !important;
+}
+h1, h2, h3, h4 {
+    color: #ff8c00;
+    font-family: 'Arial Black', sans-serif;
+}
+.stAlert {
+    background-color: #1a1a1a;
+}
+.metric-card {
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #ff8c00;
+}
+
+/* Mobile-specific styles */
+@media only screen and (max-width: 768px) {
+    /* Make chart container scrollable on mobile if needed */
+    .js-plotly-plot {
+        overflow-x: hidden !important; /* Let Plotly handle resizing */
     }
     
-    /* Mobile-specific styles */
-    @media only screen and (max-width: 768px) {
-        /* Make chart container scrollable on mobile if needed */
-        .js-plotly-plot {
-            overflow-x: hidden !important; /* Let Plotly handle resizing */
-        }
-        
-        /* Adjust header font sizes for mobile */
-        h2 {
-            font-size: 1.5rem !important;
-        }
-        
-        /* Make overall score text smaller on mobile */
-        .main h3 span {
-            font-size: 28px !important;
-        }
-
-        /* Better padding for mobile */
-        .block-container {
-            padding-top: 2rem !important;
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-        }
+    /* Adjust header font sizes for mobile */
+    h2 {
+        font-size: 1.5rem !important;
     }
-    </style>
+    
+    /* Make overall score text smaller on mobile */
+    .main h3 span {
+        font-size: 28px !important;
+    }
+
+    /* Better padding for mobile */
+    .block-container {
+        padding-top: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+}
+</style>
 """, unsafe_allow_html=True)
 
 # Header with banner
