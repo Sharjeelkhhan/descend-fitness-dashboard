@@ -131,11 +131,11 @@ with col2:
         
         # Horizontal bar chart
         categories = [
-            "POWER SCORE",
-            "AEROBIC SCORE", 
-            "ANAEROBIC SCORE",
-            "STRENGTH ENDURANCE SCORE",
-            "ABSOLUTE STRENGTH SCORE"
+            "POWER",
+            "AEROBIC", 
+            "ANAEROBIC",
+            "STR. ENDURANCE",
+            "ABS. STRENGTH"
         ]
         
         values = [power, aerobic, anaerobic, endurance, strength]
