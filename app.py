@@ -16,11 +16,13 @@ st.set_page_config(page_title="DESCEND Fitness Dashboard", layout="wide")
 
 # Custom CSS
 st.markdown("""
+    <meta name="color-scheme" content="light">
     <style>
     .main {
         background-color: #2a2a2a;
         color: #ffffff;
     }
+
     /* Force text color for all standard Streamlit text elements */
     .stMarkdown, .stMarkdown p, label, .stSelectbox label, .stNumberInput label, .stDateInput label {
         color: #ffffff !important;
