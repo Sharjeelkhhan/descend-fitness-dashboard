@@ -59,7 +59,7 @@ h1, h2, h3, h4 {
 banner_url = "https://raw.githubusercontent.com/Sharjeelkhhan/descend-fitness-dashboard/main/descend_banner.png"
 col_banner1, col_banner2, col_banner3 = st.columns([1, 3, 1])
 with col_banner2:
-    st.image(banner_url, use_column_width=True)
+    st.image(banner_url, use_container_width=True)
 
 st.markdown("---")
 
@@ -79,31 +79,62 @@ with col1:
         
         st.markdown("---")
         
-        # Test Results 
-        st.markdown("#### Strength Tests")
-        trap_bar_3rm = st.number_input("TrapBar 3RM (kg)", min_value=0.0, value=180.0)
+        # Absolute Strength Tests
+        st.markdown("#### Absolute Strength")
+        trap_bar_3rm = st.number_input("Trap Bar 3RM (kg)", min_value=0.0, value=180.0)
         split_squat_5rm = st.number_input("Split Squat 5RM (kg)", min_value=0.0, value=60.0)
         
-        st.markdown("#### Power Tests")
-        broad_jump = st.number_input("Broad Jump (cm)", min_value=0.0, value=230.0)
+        # Strength Endurance Tests
+        st.markdown("#### Strength Endurance")
+        goblet_squat = st.number_input("Goblet Squat (Reps)", min_value=0, value=30)
+        chin_ups = st.number_input("Chin Up (Reps)", min_value=0, value=12)
+        
+        # Power Tests
+        st.markdown("#### Power")
+        bike_peak_watts = st.number_input("6s Sprint (Peak Watts)", min_value=0.0, value=1100.0)
         med_ball_toss = st.number_input("Med Ball Toss (m)", min_value=0.0, value=8.0)
         
-        st.markdown("#### Conditioning Tests")
+        # Endurance Tests
+        st.markdown("#### Endurance")
         bike_12min = st.number_input("12 min Bike (avg Watts)", min_value=0.0, value=250.0)
+        
+        # Anaerobic Tests
+        st.markdown("#### Anaerobic")
         row_meters = st.number_input("3 min Row (Metres)", min_value=0.0, value=700.0)
         assault_bike = st.number_input("60s Assault Bike (cal)", min_value=0.0, value=35.0)
-        bike_peak_watts = st.number_input("6s Sprint (Peak Watts)", min_value=0.0, value=1100.0)
+        
+        # Hidden input for broad jump (using default value for calculation)
+        broad_jump = 230.0
 
         submitted = st.form_submit_button("🔄 Calculate Scores", use_container_width=True)
 
 with col2:
     if submitted:
         # Calculate scores using the functions (all return 0-100 scale)
-        strength = compute_strength_score(trap_bar_3rm, bodyweight)
-        endurance = compute_strength_endurance_score(split_squat_5rm, bodyweight)
-        power = compute_power_score(broad_jump, med_ball_toss, sex)
+        # Absolute Strength: Average of Trap Bar and Split Squat
+        score_trap_bar = compute_strength_score(trap_bar_3rm, bodyweight)
+        score_split_squat = compute_strength_endurance_score(split_squat_5rm, bodyweight) # Reusing this function for Split Squat
+        strength = (score_trap_bar + score_split_squat) / 2.0
+        
+        # Strength Endurance: Goblet Squat + Chin Up
+        # Using simple rules for now as per user previous pattern: 50 reps goblet = 100, 15 reps chinup = 100
+        # Elite standards: Goblet 40 reps = 80pts? (If 50=100). Chinup 12 reps = 80pts? (If 15=100)
+        # Assuming 50 reps Goblet = 100 pts. 
+        score_goblet = min(100.0, (goblet_squat / 50.0) * 100.0)
+        # Using 15 reps Chinup = 100 pts
+        score_chinup = min(100.0, (chin_ups / 15.0) * 100.0)
+        endurance = (score_goblet + score_chinup) / 2.0
+        
+        # Power: Sprint + Med Ball
+        # Note: compute_power_score now takes (sprint_watts, med_ball, sex)
+        power = compute_power_score(bike_peak_watts, med_ball_toss, sex)
+        
+        # Endurance (Aerobic): 12 min bike
         aerobic = compute_aerobic_score(bike_12min)
-        anaerobic = compute_anaerobic_score(row_meters, assault_bike, bike_peak_watts, sex)
+        
+        # Anaerobic: Row + Assault Bike
+        # Note: compute_anaerobic_score now takes (row, assault, sex)
+        anaerobic = compute_anaerobic_score(row_meters, assault_bike, sex)
         
         # Compute overall as mean of all test scores
         test_scores_dict = {
@@ -161,15 +192,15 @@ with col2:
                 zerolinecolor='#404040',
                 tickvals=[0, 20, 40, 60, 80, 100],
                 tickfont=dict(color='#999999', size=11),
-                fixedrange=True  # Prevent zoom on mobile
+                fixedrange=True
             ),
             yaxis=dict(
                 showgrid=False,
                 tickfont=dict(color='#ffffff', size=12),
-                fixedrange=True,  # Prevent zoom on mobile
-                automargin=True  # Auto-adjust margins for labels
+                fixedrange=True,
+                automargin=True
             ),
-            height=500,  # Increased height for better mobile display
+            height=500,
             margin=dict(l=10, r=40, t=20, b=40, autoexpand=True),
             showlegend=False,
             autosize=True
@@ -228,14 +259,15 @@ with col2:
         
         # Individual test scores with performance bands
         test_scores = {
-            "trap_bar": strength,
-            "split_squat": endurance,
-            "broad_jump": (broad_jump / elite_standards['broad_jump']) * 80,
+            "trap_bar": score_trap_bar,
+            "split_squat": score_split_squat,
+            "goblet_squat": score_goblet,
+            "chin_ups": score_chinup,
+            "sprint_6s": (bike_peak_watts / elite_standards['sprint_6s']) * 80,
             "med_ball": (med_ball_toss / elite_standards['med_ball']) * 80,
             "bike_12min": aerobic,
             "rower_3min": (row_meters / elite_standards['rower_3min']) * 100,
             "airbike_60s": (assault_bike / elite_standards['airbike_60s']) * 80,
-            "sprint_6s": (bike_peak_watts / elite_standards['sprint_6s']) * 80,
         }
         
         # Clamp all scores to 100 max
@@ -247,53 +279,58 @@ with col2:
         summary_data = {
             "Test": [
                 "Trap Bar 3RM", 
-                "Split Squat 5RM", 
-                "Broad Jump",
+                "Split Squat 5RM",
+                "Goblet Squat",
+                "Chin Ups",
+                "6s Sprint Peak",
                 "Med Ball Toss",
                 "12min Bike (avg)", 
                 "Rower 3min", 
-                "Assault Bike 60s", 
-                "Sprint 6s Peak"
+                "Assault Bike 60s"
             ],
             "Result": [
                 f"{round_int(trap_bar_3rm)}kg", 
-                f"{round_int(split_squat_5rm)}kg", 
-                f"{round_int(broad_jump)}cm",
+                f"{round_int(split_squat_5rm)}kg",
+                f"{round_int(goblet_squat)} reps",
+                f"{round_int(chin_ups)} reps",
+                f"{round_int(bike_peak_watts)}W",
                 f"{round_int(med_ball_toss)}m",
                 f"{round_int(bike_12min)}W", 
                 f"{round_int(row_meters)}m", 
-                f"{round_int(assault_bike)} cal", 
-                f"{round_int(bike_peak_watts)}W"
+                f"{round_int(assault_bike)} cal"
             ],
             "Elite Target": [
                 f"{round_int(elite_standards['trap_bar'])}kg",
                 f"{round_int(elite_standards['split_squat'])}kg",
-                f"{round_int(elite_standards['broad_jump'])}cm",
+                "50 reps",
+                "15 reps",
+                f"{round_int(elite_standards['sprint_6s'])}W",
                 f"{elite_standards['med_ball']:.1f}m",
                 f"{round_int(elite_standards['bike_12min'])}W",
                 f"{round_int(elite_standards['rower_3min'])}m",
-                f"{round_int(elite_standards['airbike_60s'])} cal",
-                f"{round_int(elite_standards['sprint_6s'])}W"
+                f"{round_int(elite_standards['airbike_60s'])} cal"
             ],
             "Score": [
                 f"{round_int(test_scores['trap_bar'])}",
                 f"{round_int(test_scores['split_squat'])}",
-                f"{round_int(test_scores['broad_jump'])}",
+                f"{round_int(test_scores['goblet_squat'])}",
+                f"{round_int(test_scores['chin_ups'])}",
+                f"{round_int(test_scores['sprint_6s'])}",
                 f"{round_int(test_scores['med_ball'])}",
                 f"{round_int(test_scores['bike_12min'])}",
                 f"{round_int(test_scores['rower_3min'])}",
-                f"{round_int(test_scores['airbike_60s'])}",
-                f"{round_int(test_scores['sprint_6s'])}"
+                f"{round_int(test_scores['airbike_60s'])}"
             ],
             "Performance": [
                 test_bands['trap_bar'],
                 test_bands['split_squat'],
-                test_bands['broad_jump'],
+                test_bands['goblet_squat'],
+                test_bands['chin_ups'],
+                test_bands['sprint_6s'],
                 test_bands['med_ball'],
                 test_bands['bike_12min'],
                 test_bands['rower_3min'],
-                test_bands['airbike_60s'],
-                test_bands['sprint_6s']
+                test_bands['airbike_60s']
             ]
         }
         
@@ -332,24 +369,24 @@ with col2:
         This comprehensive fitness assessment evaluates MTB athletes across **5 key performance domains**:
         
         #### 🏋️ Absolute Strength
-        - Trap bar deadlift 3RM relative to bodyweight
+        - Trap bar deadlift 3RM & Split squat 5RM
         - Elite: 2.0x bodyweight (80 points)
         
         #### 💪 Strength Endurance  
-        - Split squat 5RM capacity per leg
-        - Elite: ~0.75x bodyweight (80 points)
+        - Goblet squat & Chin ups
+        - Tests muscular endurance capacity
         
         #### ⚡ Power
-        - Broad jump + med ball toss
-        - Elite: 260cm (M) / 200cm (F) broad jump, 11m (M) / 8m (F) med ball
+        - 6s Sprint & Med ball toss
+        - Elite: 11m (M) / 8m (F) med ball, 1300W sprint
         
-        #### 🫁 Aerobic Capacity
+        #### 🫁 Endurance (Aerobic)
         - 12-minute sustained bike effort
         - Elite: 350W average (80 points)
         
         #### 🔥 Anaerobic Capacity
-        - Short-duration high-intensity tests
-        - Elite: 45 cal airbike, 900m rower, 1300W sprint
+        - 3 min rower & 60s assault bike
+        - Elite: 45 cal airbike, 900m rower
         
         ---
         
