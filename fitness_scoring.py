@@ -30,27 +30,40 @@ def compute_strength_endurance_score(split_squat, bodyweight):
     return round(clamp_score(raw), 2)
 
 
+_CHIN_UP_ELITE_REPS = 20.0  # Placeholder: 20 reps = 80 points
+
+def compute_chin_up_score(reps):
+    """
+    Strength endurance score based on chin up reps
+    """
+    if reps < 0:
+        return 0.0
+    # Linear scale: 20 reps -> 80 pts (4 pts per rep)
+    # 25 reps -> 100 pts
+    raw = (reps / _CHIN_UP_ELITE_REPS) * ELITE_THRESHOLD
+    return round(clamp_score(raw), 2)
+
+
 _BROAD_BASE_MALE_CM = 260.0
 _BROAD_BASE_FEMALE_CM = 200.0
 _MEDBALL_BASE_MALE_M = 11.0
 _MEDBALL_BASE_FEMALE_M = 8.0
 
-def compute_power_score(broad_jump_cm, medball_toss, sex):
+def compute_power_score(sprint_watts, medball_toss, sex):
     """
-    Power score combines broad jump and med ball toss
+    Power score combines 6s Sprint and med ball toss (Broad Jump removed)
     """
     sex = sex.lower()
     
-    # Broad jump component
-    broad_base = _BROAD_BASE_FEMALE_CM if sex == "female" else _BROAD_BASE_MALE_CM
-    broad_score = (broad_jump_cm / broad_base) * 100.0
+    # Sprint component (moved from Anaerobic)
+    sprint_score = (sprint_watts / _ELITE_SPRINT_6_WATTS) * ELITE_THRESHOLD
     
     # Med ball component
     medball_base = _MEDBALL_BASE_FEMALE_M if sex == "female" else _MEDBALL_BASE_MALE_M
     medball_score = (medball_toss / medball_base) * 100.0
     
     # Average the two
-    raw = (broad_score + medball_score) / 2.0
+    raw = (sprint_score + medball_score) / 2.0
     return round(clamp_score(raw), 2)
 
 
@@ -71,9 +84,9 @@ _ROWER_BASE_FEMALE_M = 750.0
 _ELITE_AIRBIKE_60_CAL = 45.0  # 45 cal -> 80 pts
 _ELITE_SPRINT_6_WATTS = 1300.0  # 1300W -> 80 pts
 
-def compute_anaerobic_score(rower_3min, airbike_60s, sprint_6s, sex):
+def compute_anaerobic_score(rower_3min, airbike_60s, sex):
     """
-    Anaerobic score averages three test outputs
+    Anaerobic score averages Rower and Assault Bike
     """
     sex = sex.lower()
     
@@ -81,14 +94,12 @@ def compute_anaerobic_score(rower_3min, airbike_60s, sprint_6s, sex):
     rower_base = _ROWER_BASE_FEMALE_M if sex == "female" else _ROWER_BASE_MALE_M
     rower_score = (rower_3min / rower_base) * 100.0
     
-    # Airbike score
+    # Airbike score (Keeping as Calories for now as Watts standard is unknown, user said '60s' which implies the standard test)
+    # If user meant Watts, we would need a conversion factor. Assuming Cal for stability.
     airbike_score = (airbike_60s / _ELITE_AIRBIKE_60_CAL) * ELITE_THRESHOLD
     
-    # Sprint score
-    sprint_score = (sprint_6s / _ELITE_SPRINT_6_WATTS) * ELITE_THRESHOLD
-    
-    # Average the three
-    raw = (rower_score + airbike_score + sprint_score) / 3.0
+    # Average the two
+    raw = (rower_score + airbike_score) / 2.0
     return round(clamp_score(raw), 2)
 
 
@@ -152,7 +163,7 @@ def get_elite_standards(bodyweight, sex):
     elite_scores = {
         "trap_bar": trap_elite,
         "split_squat": split_elite,
-        "broad_jump": broad_elite,
+        "chin_up": _CHIN_UP_ELITE_REPS,  # Added
         "med_ball": medball_elite,
         "bike_12min": _ELITE_BIKE_12_WATTS,
         "rower_3min": rower_elite,
